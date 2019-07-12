@@ -105,7 +105,7 @@ void ps3Cmd( ps3_cmd_t cmd )
     uint8_t hid_cmd_payload_ps3_enable[] = { 0x52, 0x01, 0x00, 0x5f, 0xff, 0x5f, 0xff, 0x00, 0x00, 0x00, 0x00, 0x01 };
     memcpy( hid_cmd_payload, hid_cmd_payload_ps3_enable, sizeof(hid_cmd_payload_ps3_enable));
     len = PS3_HID_BUFFER_SIZE;
-    memcpy( hid_cmd.data, hid_cmd_payload, len);
+    memcpy( hid_cmd.data, hid_cmd_payload, sizeof(hid_cmd.data));
 
     ps3_l2cap_send_hid( &hid_cmd, len );
 }
