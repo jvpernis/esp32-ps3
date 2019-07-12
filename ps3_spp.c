@@ -92,7 +92,13 @@ static void ps3_spp_callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param
     if (event == ESP_SPP_INIT_EVT) {
         ESP_LOGI(PS3_TAG, "ESP_SPP_INIT_EVT");
         esp_bt_dev_set_device_name(PS3_DEVICE_NAME);
+
+#if CONFIG_IDF_COMPATIBILITY >= IDF_COMPATIBILITY_MASTER_D9CE0BB
         esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_NON_DISCOVERABLE);
+#elif CONFIG_IDF_COMPATIBILITY >= IDF_COMPATIBILITY_MASTER_21AF1D7
+        esp_bt_gap_set_scan_mode(ESP_BT_SCAN_MODE_CONNECTABLE);
+#endif
+
         esp_spp_start_srv(ESP_SPP_SEC_NONE,ESP_SPP_ROLE_SLAVE, 0, PS3_SERVER_NAME);
     }
 }
