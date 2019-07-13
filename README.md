@@ -102,6 +102,23 @@ if ( event.analog_changed.stick.lx )
     print("The user has moved the left stick sideways");
 ```
 
+Troubleshooting
+==============
+
+### The component gives compilation errors ###
+This project uses ESP-IDF internal API's in order to implement the PS3 controller functionality. This has a drawback of being susceptible to being suddenly broken. To remedy this, a compatibility config menu has been added so you can select older ESP-IDF versions to work with.
+
+In your project folder, run `make menuconfig` and configure your project with the following steps:
+- Navigate to `Component config  --->` and press <kbd>Enter</kbd> to open the component config menu.
+- Navigate to `PS3  --->` and press <kbd>Enter</kbd> to open the Bluetooth config menu.
+- Navigate to `Framework compatibility` and press <kbd>Enter</kbd> to show the compatibility options.
+- Select the compatibility suitable to your ESP-IDF version
+
+If you selected the `Latest stable release` or `Latest master revision` option and you are still getting compiler errors, please [create an issue](https://github.com/jvpernis/esp32-ps3/issues/new).
+
+If you are unsure which master branch revision you should take, figure out what the commit date is of your ESP-IDF version (by running `git show`), and look at the help text of each revision listed in the `Framework compatibility` configuration option to know their revision date.
+
+
 Sources
 ==============
 I've had tremendous help developing this library by reading these sources:
