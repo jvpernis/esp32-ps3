@@ -56,10 +56,15 @@ In your project folder, run `make menuconfig` and configure your project with th
 In order to use this library, you just need to set an event callback, call the initialisation function, and, optionally, wait for the PS3 controller to be connected:
 ```c
 #include "ps3.h"
+#include "freertos/task.h"
 
 ps3SetEventCallback(controller_event_cb);
 ps3Init();
-while (!ps3IsConnected());
+
+while (!ps3IsConnected()){
+    // Prevent the Task Watchdog from triggering
+    vTaskDelay(10 / portTICK_PERIOD_MS);
+}
 ```
 
 Your event callback will have to look like this:
