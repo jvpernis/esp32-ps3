@@ -45,6 +45,8 @@ In your project folder, run `make menuconfig` and configure your project with th
 - Navigate to `Bluetooth controller mode` and press <kbd>Enter</kbd> to show the controller mode options.
 - Select `BR/EDR Only` and press <kbd>Enter</kbd> to confirm the choice.
 - Press <kbd>E</kbd> to go back to the Bluetooth menu.
+- If it exists, navigate to `Bluetooth Host` and press <kbd>Enter</kbd> to show the host options.
+- Select `Bluedroid - Dual-mode` and press <kbd>Enter</kbd> to confirm the choice.
 - Navigate to `[] Bluedroid Enable  --->` and press <kbd>Y</kbd> to enable Bluedroid if it isn't already, then press <kbd>Enter</kbd> to open its menu.
 - Navigate to `Classic Bluetooth` and press <kbd>Y</kbd> to enable it
 - Navigate to `SPP` and press <kbd>Y</kbd> to enable it
