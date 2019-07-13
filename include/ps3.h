@@ -165,6 +165,7 @@ void ps3Enable();
 void ps3Cmd( ps3_cmd_t ps3_cmd );
 void ps3SetEventCallback( ps3_event_callback_t cb );
 void ps3SetLed( uint8_t led );
+void ps3SetBluetoothMacAddress( const uint8_t *mac );
 
 
 #endif

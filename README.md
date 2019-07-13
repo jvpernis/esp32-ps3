@@ -16,10 +16,8 @@ Whichever path you choose, you're going to need a tool to read and/or write the 
 
 If you opted to change the ESP32's MAC address, you'll need to include this snippet in your code **before** calling ```ps3Init()```, where the MAC address should match with the one stored on the PS3 controller:
 ```c
-#include <esp_system.h>
-
 uint8_t new_mac[8] = {0x01,0x02,0x03,0x04,0x05,0x06};
-esp_base_mac_addr_set(new_mac);
+ps3SetBluetoothMacAddress(new_mac);
 ```
 
 Getting Started
