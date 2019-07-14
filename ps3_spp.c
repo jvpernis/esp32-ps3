@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "ps3.h"
+#include "ps3_int.h"
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "freertos/FreeRTOS.h"
