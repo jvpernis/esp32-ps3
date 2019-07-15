@@ -98,7 +98,7 @@ void ps3_l2cap_send_hid( hid_cmd_t *hid_cmd, uint8_t len )
         ESP_LOGE(PS3_TAG, "[%s] allocating buffer for sending the command failed", __func__);
     }
 
-    p_buf->len = len;
+    p_buf->len = len + ( sizeof(*hid_cmd) - sizeof(hid_cmd->data) );
     p_buf->offset = L2CAP_MIN_OFFSET;
 
     memcpy ((uint8_t *)(p_buf + 1) + p_buf->offset, (uint8_t*)hid_cmd, p_buf->len);
