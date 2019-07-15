@@ -10,6 +10,7 @@
 /********************************************************************************/
 
 static const uint8_t hid_cmd_payload_ps3_enable[] = { 0x42, 0x03, 0x00, 0x00 };
+static const uint8_t hid_cmd_payload_led_arguments[] = { 0xff, 0x27, 0x10, 0x00, 0x32 };
 
 
 /********************************************************************************/
@@ -87,8 +88,8 @@ void ps3Enable()
 *******************************************************************************/
 void ps3Cmd( ps3_cmd_t cmd )
 {
-    uint16_t len = sizeof(cmd);
     hid_cmd_t hid_cmd = { .data = {0} };
+    uint16_t len = sizeof(hid_cmd.data);
 
     hid_cmd.code = hid_cmd_code_set_report | hid_cmd_code_type_output;
     hid_cmd.identifier = hid_cmd_identifier_ps3_control;
@@ -104,13 +105,10 @@ void ps3Cmd( ps3_cmd_t cmd )
     if (cmd.led3) hid_cmd.data[ps3_control_packet_index_leds] |= ps3_led_mask_led3;
     if (cmd.led4) hid_cmd.data[ps3_control_packet_index_leds] |= ps3_led_mask_led4;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // TODO: replace below by continuing the above
-    uint8_t hid_cmd_payload[PS3_HID_BUFFER_SIZE]  = {0};
-    uint8_t hid_cmd_payload_ps3_enable[] = { 0x52, 0x01, 0x00, 0x5f, 0xff, 0x5f, 0xff, 0x00, 0x00, 0x00, 0x00, 0x01 };
-    memcpy( hid_cmd_payload, hid_cmd_payload_ps3_enable, sizeof(hid_cmd_payload_ps3_enable));
-    len = PS3_HID_BUFFER_SIZE;
-    memcpy( hid_cmd.data, hid_cmd_payload, sizeof(hid_cmd.data));
+    if (cmd.led1) memcpy( hid_cmd.data + ps3_control_packet_index_led1_arguments, hid_cmd_payload_led_arguments, sizeof(hid_cmd_payload_led_arguments));
+    if (cmd.led2) memcpy( hid_cmd.data + ps3_control_packet_index_led2_arguments, hid_cmd_payload_led_arguments, sizeof(hid_cmd_payload_led_arguments));
+    if (cmd.led3) memcpy( hid_cmd.data + ps3_control_packet_index_led3_arguments, hid_cmd_payload_led_arguments, sizeof(hid_cmd_payload_led_arguments));
+    if (cmd.led4) memcpy( hid_cmd.data + ps3_control_packet_index_led4_arguments, hid_cmd_payload_led_arguments, sizeof(hid_cmd_payload_led_arguments));
 
     ps3_l2cap_send_hid( &hid_cmd, len );
 }

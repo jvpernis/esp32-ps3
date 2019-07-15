@@ -16,7 +16,7 @@
 
 enum hid_cmd_code {
     hid_cmd_code_set_report   = 0x50,
-    hid_cmd_code_type_output  = 0x0f,
+    hid_cmd_code_type_output  = 0x02,
     hid_cmd_code_type_feature = 0x03
 };
 
@@ -39,7 +39,11 @@ enum ps3_control_packet_index {
     ps3_control_packet_index_rumble_left_duration = 3,
     ps3_control_packet_index_rumble_left_intensity = 4,
 
-    ps3_control_packet_index_leds = 9
+    ps3_control_packet_index_leds = 9,
+    ps3_control_packet_index_led4_arguments = 10,
+    ps3_control_packet_index_led3_arguments = 15,
+    ps3_control_packet_index_led2_arguments = 20,
+    ps3_control_packet_index_led1_arguments = 25
 };
 
 enum ps3_led_mask {
