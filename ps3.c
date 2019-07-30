@@ -31,7 +31,7 @@ static const uint8_t hid_cmd_payload_led_arguments[] = { 0xff, 0x27, 0x10, 0x00,
 void ps3Init()
 {
     ps3_spp_init();
-    ps3_l2cap_init_services();
+    ps3_gap_init_services();
 }
 
 
@@ -73,7 +73,7 @@ void ps3Enable()
 
     memcpy( hid_cmd.data, hid_cmd_payload_ps3_enable, len);
 
-    ps3_l2cap_send_hid( &hid_cmd, len );
+    ps3_gap_send_hid( &hid_cmd, len );
 }
 
 /*******************************************************************************
@@ -110,7 +110,7 @@ void ps3Cmd( ps3_cmd_t cmd )
     if (cmd.led3) memcpy( hid_cmd.data + ps3_control_packet_index_led3_arguments, hid_cmd_payload_led_arguments, sizeof(hid_cmd_payload_led_arguments));
     if (cmd.led4) memcpy( hid_cmd.data + ps3_control_packet_index_led4_arguments, hid_cmd_payload_led_arguments, sizeof(hid_cmd_payload_led_arguments));
 
-    ps3_l2cap_send_hid( &hid_cmd, len );
+    ps3_gap_send_hid( &hid_cmd, len );
 }
 
 
