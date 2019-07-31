@@ -5,6 +5,8 @@
 COMPONENT_SRCDIRS := src
 COMPONENT_ADD_INCLUDEDIRS := src/include
 
+COMPONENT_OBJS := src/ps3.o src/ps3_spp.o src/ps3_parser.o src/ps3_gap.o
+
 COMPONENT_EXTRA_INCLUDES +=     $(IDF_PATH)/components/bt/common/include/                     \
                                 $(IDF_PATH)/components/bt/host/bluedroid/common/include/      \
                                 $(IDF_PATH)/components/bt/host/bluedroid/stack/include        \
