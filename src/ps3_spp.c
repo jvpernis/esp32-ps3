@@ -41,6 +41,8 @@ static void ps3_spp_callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param
 void ps3_spp_init()
 {
     esp_err_t ret;
+
+#ifndef ARDUINO_ARCH_ESP32
     esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
     if ((ret = esp_bt_controller_init(&bt_cfg)) != ESP_OK) {
         ESP_LOGE(PS3_TAG, "%s initialize controller failed: %s\n", __func__, esp_err_to_name(ret));
@@ -61,6 +63,7 @@ void ps3_spp_init()
         ESP_LOGE(PS3_TAG, "%s enable bluedroid failed: %s\n", __func__, esp_err_to_name(ret));
         return;
     }
+#endif
 
     if ((ret = esp_spp_register_callback(ps3_spp_callback)) != ESP_OK) {
         ESP_LOGE(PS3_TAG, "%s spp register failed: %s\n", __func__, esp_err_to_name(ret));
