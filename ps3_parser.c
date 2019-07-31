@@ -88,12 +88,17 @@ ps3_event_t ps3_parse_event( ps3_t prev, ps3_t cur );
 /*                         L O C A L    V A R I A B L E S                       */
 /********************************************************************************/
 
-ps3_t ps3;
-ps3_event_callback_t ps3_event_cb;
+static ps3_t ps3;
+static ps3_event_callback_t ps3_event_cb;
 
 /********************************************************************************/
 /*                      P U B L I C    F U N C T I O N S                        */
 /********************************************************************************/
+void ps3_parser_set_event_cb( ps3_event_callback_t cb )
+{
+    ps3_event_cb = cb;
+}
+
 
 void ps3_parse_packet( uint8_t *packet )
 {

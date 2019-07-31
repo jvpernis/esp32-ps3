@@ -54,18 +54,10 @@ enum ps3_led_mask {
 };
 
 /********************************************************************************/
-/*                      S H A R E D   V A R I A B L E S                         */
-/********************************************************************************/
-
-extern ps3_t ps3;
-extern ps3_event_callback_t ps3_event_cb;
-extern bool is_connected;
-
-
-/********************************************************************************/
 /*                      P A R S E R   F U N C T I O N S                         */
 /********************************************************************************/
 
+void ps3_parser_set_event_cb( ps3_event_callback_t cb );
 void ps3_parse_packet( uint8_t *packet );
 
 
@@ -80,6 +72,7 @@ void ps3_spp_init();
 /*                          G A P   F U N C T I O N S                           */
 /********************************************************************************/
 
+bool ps3_gap_is_connected();
 void ps3_gap_init_services();
 void ps3_gap_send_hid( hid_cmd_t *hid_cmd, uint8_t len );
 

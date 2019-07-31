@@ -38,12 +38,26 @@ static tL2CAP_CFG_INFO ps3_cfg_info = {0};
 uint16_t gap_handle_hidc = GAP_INVALID_HANDLE;
 uint16_t gap_handle_hidi = GAP_INVALID_HANDLE;
 
-bool is_connected = false;
+static bool is_connected = false;
 
 
 /********************************************************************************/
 /*                      P U B L I C    F U N C T I O N S                        */
 /********************************************************************************/
+/*******************************************************************************
+**
+** Function         ps3_gap_is_connected
+**
+** Description      This returns whether a PS3 controller is connected, based
+**                  on whether a successful handshake has taken place.
+**
+** Returns          void
+**
+*******************************************************************************/
+bool ps3_gap_is_connected()
+{
+    return is_connected;
+}
 
 /*******************************************************************************
 **

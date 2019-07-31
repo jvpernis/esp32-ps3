@@ -48,7 +48,7 @@ void ps3Init()
 *******************************************************************************/
 bool ps3IsConnected()
 {
-    return is_connected;
+    return ps3_gap_is_connected();
 }
 
 
@@ -148,7 +148,7 @@ void ps3SetLed( uint8_t led )
 *******************************************************************************/
 void ps3SetEventCallback( ps3_event_callback_t cb )
 {
-    ps3_event_cb = cb;
+    ps3_parser_set_event_cb(cb);
 }
 
 
