@@ -1,10 +1,16 @@
 #ifndef PS3_INT_H
 #define PS3_INT_H
 
+#include "sdkconfig.h"
+
 /** ESP-IDF compatibility configuration option choices */
 #define IDF_COMPATIBILITY_MASTER_21165ED 3
 #define IDF_COMPATIBILITY_MASTER_D9CE0BB 2
 #define IDF_COMPATIBILITY_MASTER_21AF1D7 1
+
+#ifndef CONFIG_IDF_COMPATIBILITY
+#define CONFIG_IDF_COMPATIBILITY IDF_COMPATIBILITY_MASTER_21AF1D7
+#endif
 
 /** Size of the output report buffer for the Dualshock and Navigation controllers */
 #define PS3_REPORT_BUFFER_SIZE 48
