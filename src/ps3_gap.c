@@ -2,8 +2,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#include "ps3.h"
-#include "ps3_int.h"
+#include "include/ps3.h"
+#include "include/ps3_int.h"
 #include "esp_log.h"
 #include "esp_bt.h"
 #include "esp_bt_main.h"
