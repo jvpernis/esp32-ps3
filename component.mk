@@ -2,6 +2,9 @@
 # Component Makefile
 #
 
+COMPONENT_SRCDIRS := src
+COMPONENT_ADD_INCLUDEDIRS := src/include
+
 COMPONENT_EXTRA_INCLUDES +=     $(IDF_PATH)/components/bt/common/include/                     \
                                 $(IDF_PATH)/components/bt/host/bluedroid/common/include/      \
                                 $(IDF_PATH)/components/bt/host/bluedroid/stack/include        \
