@@ -31,6 +31,7 @@ class Ps3Controller
         void attach(callback_t callback);
 
     private:
+        static void _event_callback(void *object, ps3_t data, ps3_event_t event);
         callback_t _callback = nullptr;
 
 };

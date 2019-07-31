@@ -16,6 +16,8 @@ Ps3Controller::Ps3Controller()
 
 bool Ps3Controller::begin()
 {
+    ps3SetEventObjectCallback(this, &Ps3Controller::_event_callback);
+
     if(!btStarted() && !btStart()){
         log_e("btStart failed");
         return false;
@@ -86,6 +88,18 @@ void Ps3Controller::attach(callback_t callback)
 
 }
 
+
+void Ps3Controller::_event_callback(void *object, ps3_t data, ps3_event_t event)
+{
+    Ps3Controller* This = (Ps3Controller*) object;
+
+    memcpy(&This->data, &data, sizeof(ps3_t));
+    memcpy(&This->event, &event, sizeof(ps3_event_t));
+
+    if (This->_callback){
+        This->_callback();
+    }
+}
 
 #if !defined(NO_GLOBAL_INSTANCES)
 Ps3Controller Ps3;
