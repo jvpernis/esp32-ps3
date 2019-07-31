@@ -3,6 +3,33 @@
 
 #include "sdkconfig.h"
 
+/** Check if the project is configured properly */
+#ifndef CONFIG_BT_ENABLED
+#error "The ESP32-PS3 module requires the Bluetooth component to be enabled in the project's menuconfig"
+#endif
+
+#ifndef CONFIG_BLUEDROID_ENABLED
+#error "The ESP32-PS3 module requires Bluedroid to be enabled in the project's menuconfig"
+#endif
+
+#ifndef CONFIG_CLASSIC_BT_ENABLED
+#error "The ESP32-PS3 module requires Classic Bluetooth to be enabled in the project's menuconfig"
+#endif
+
+#ifndef CONFIG_BT_SPP_ENABLED
+#error "The ESP32-PS3 module requires Classic Bluetooth's SPP to be enabled in the project's menuconfig"
+#endif
+
+/** Check the configured blueooth mode */
+#ifdef CONFIG_BTDM_CONTROLLER_MODE_BTDM
+#define BT_MODE ESP_BT_MODE_BTDM
+#elif defined CONFIG_BTDM_CONTROLLER_MODE_BR_EDR_ONLY
+#define BT_MODE ESP_BT_MODE_CLASSIC_BT
+#else
+#error "The selected Bluetooth controller mode is not supported by the ESP32-PS3 module"
+#endif
+
+
 /** ESP-IDF compatibility configuration option choices */
 #define IDF_COMPATIBILITY_MASTER_21165ED 3
 #define IDF_COMPATIBILITY_MASTER_D9CE0BB 2
