@@ -125,7 +125,7 @@ void ps3_gap_send_hid( hid_cmd_t *hid_cmd, uint8_t len )
 *******************************************************************************/
 static uint16_t ps3_gap_init_service( char *name, uint16_t psm, uint8_t security_id)
 {
-    uint16_t handle = GAP_ConnOpen (name, security_id, /*is_server=*/TRUE, /*p_rem_bda=*/NULL,
+    uint16_t handle = GAP_ConnOpen (name, security_id, /*is_server=*/true, /*p_rem_bda=*/NULL,
                      psm, &ps3_cfg_info, &ps3_ertm_info, /*security=*/0, /*chan_mode_mask=*/0,
                      ps3_gap_event_handle);
 
