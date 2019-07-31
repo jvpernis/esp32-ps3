@@ -153,6 +153,7 @@ typedef struct {
 /***************************/
 
 typedef void(*ps3_event_callback_t)( ps3_t ps3, ps3_event_t event );
+typedef void(*ps3_event_object_callback_t)( void *object, ps3_t ps3, ps3_event_t event );
 
 
 /********************************************************************************/
@@ -164,6 +165,7 @@ void ps3Init();
 void ps3Enable();
 void ps3Cmd( ps3_cmd_t ps3_cmd );
 void ps3SetEventCallback( ps3_event_callback_t cb );
+void ps3SetEventObjectCallback( void *object, ps3_event_object_callback_t cb );
 void ps3SetLed( uint8_t led );
 void ps3SetBluetoothMacAddress( const uint8_t *mac );
 

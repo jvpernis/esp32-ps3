@@ -154,6 +154,22 @@ void ps3SetEventCallback( ps3_event_callback_t cb )
 
 /*******************************************************************************
 **
+** Function         ps3SetEventObjectCallback
+**
+** Description      Registers a callback for receiving PS3 controller events
+**
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3SetEventObjectCallback( void *object, ps3_event_object_callback_t cb )
+{
+    ps3_parser_set_event_object_cb(object, cb);;
+}
+
+
+/*******************************************************************************
+**
 ** Function         ps3SetBluetoothMacAddress
 **
 ** Description      Writes a Registers a callback for receiving PS3 controller events

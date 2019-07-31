@@ -91,6 +91,7 @@ enum ps3_led_mask {
 /********************************************************************************/
 
 void ps3_parser_set_event_cb( ps3_event_callback_t cb );
+void ps3_parser_set_event_object_cb( void *object, ps3_event_object_callback_t cb );
 void ps3_parse_packet( uint8_t *packet );
 
 

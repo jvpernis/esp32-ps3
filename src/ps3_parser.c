@@ -89,7 +89,9 @@ ps3_event_t ps3_parse_event( ps3_t prev, ps3_t cur );
 /********************************************************************************/
 
 static ps3_t ps3;
-static ps3_event_callback_t ps3_event_cb;
+static ps3_event_callback_t ps3_event_cb = NULL;
+static ps3_event_object_callback_t ps3_event_object_cb = NULL;
+static void *ps3_event_object = NULL;
 
 /********************************************************************************/
 /*                      P U B L I C    F U N C T I O N S                        */
@@ -97,6 +99,13 @@ static ps3_event_callback_t ps3_event_cb;
 void ps3_parser_set_event_cb( ps3_event_callback_t cb )
 {
     ps3_event_cb = cb;
+}
+
+
+void ps3_parser_set_event_object_cb( void *object, ps3_event_object_callback_t cb )
+{
+    ps3_event_object_cb = cb;
+    ps3_event_object = object;
 }
 
 
@@ -110,10 +119,16 @@ void ps3_parse_packet( uint8_t *packet )
     ps3.sensor        = ps3_parse_packet_sensor(packet);
     ps3.status        = ps3_parse_packet_status(packet);
 
-    if(ps3_event_cb)
+    ps3_event_t ps3_event = ps3_parse_event( prev_ps3, ps3 );
+
+    if(ps3_event_cb != NULL)
     {
-        ps3_event_t ps3_event = ps3_parse_event( prev_ps3, ps3 );
         ps3_event_cb( ps3, ps3_event );
+    }
+
+    if(ps3_event_object_cb != NULL && ps3_event_object != NULL)
+    {
+        ps3_event_object_cb( ps3_event_object, ps3, ps3_event );
     }
 
 }
