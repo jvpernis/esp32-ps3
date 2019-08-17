@@ -4,6 +4,8 @@
 #include "sdkconfig.h"
 
 /** Check if the project is configured properly */
+#ifndef ARDUINO_ARCH_ESP32
+
 #ifndef CONFIG_BT_ENABLED
 #error "The ESP32-PS3 module requires the Bluetooth component to be enabled in the project's menuconfig"
 #endif
@@ -29,6 +31,7 @@
 #error "The selected Bluetooth controller mode is not supported by the ESP32-PS3 module"
 #endif
 
+#endif // ARDUINO_ARCH_ESP32
 
 /** ESP-IDF compatibility configuration option choices */
 #define IDF_COMPATIBILITY_MASTER_21165ED 3
