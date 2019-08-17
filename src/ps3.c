@@ -14,6 +14,15 @@ static const uint8_t hid_cmd_payload_led_arguments[] = { 0xff, 0x27, 0x10, 0x00,
 
 
 /********************************************************************************/
+/*                         L O C A L    V A R I A B L E S                       */
+/********************************************************************************/
+
+static ps3_event_callback_t ps3_event_cb = NULL;
+static ps3_event_object_callback_t ps3_event_object_cb = NULL;
+static void *ps3_event_object = NULL;
+
+
+/********************************************************************************/
 /*                      P U B L I C    F U N C T I O N S                        */
 /********************************************************************************/
 
@@ -148,7 +157,7 @@ void ps3SetLed( uint8_t led )
 *******************************************************************************/
 void ps3SetEventCallback( ps3_event_callback_t cb )
 {
-    ps3_parser_set_event_cb(cb);
+    ps3_event_cb = cb;
 }
 
 
@@ -164,7 +173,8 @@ void ps3SetEventCallback( ps3_event_callback_t cb )
 *******************************************************************************/
 void ps3SetEventObjectCallback( void *object, ps3_event_object_callback_t cb )
 {
-    ps3_parser_set_event_object_cb(object, cb);;
+    ps3_event_object_cb = cb;
+    ps3_event_object = object;
 }
 
 
@@ -186,4 +196,22 @@ void ps3SetBluetoothMacAddress( const uint8_t *mac )
     memcpy(base_mac, mac, 6);
     base_mac[5] -= 2;
     esp_base_mac_addr_set(base_mac);
+}
+
+
+/********************************************************************************/
+/*                      L O C A L    F U N C T I O N S                          */
+/********************************************************************************/
+
+void ps3_packet_event( ps3_t ps3, ps3_event_t event )
+{
+    if(ps3_event_cb != NULL)
+    {
+        ps3_event_cb( ps3, event );
+    }
+
+    if(ps3_event_object_cb != NULL && ps3_event_object != NULL)
+    {
+        ps3_event_object_cb( ps3_event_object, ps3, event );
+    }
 }

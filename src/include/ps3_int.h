@@ -86,12 +86,18 @@ enum ps3_led_mask {
     ps3_led_mask_led4 = 1 << 4,
 };
 
+
+/********************************************************************************/
+/*                     C A L L B A C K   F U N C T I O N S                      */
+/********************************************************************************/
+
+void ps3_packet_event( ps3_t ps3, ps3_event_t event );
+
+
 /********************************************************************************/
 /*                      P A R S E R   F U N C T I O N S                         */
 /********************************************************************************/
 
-void ps3_parser_set_event_cb( ps3_event_callback_t cb );
-void ps3_parser_set_event_object_cb( void *object, ps3_event_object_callback_t cb );
 void ps3_parse_packet( uint8_t *packet );
 
 
