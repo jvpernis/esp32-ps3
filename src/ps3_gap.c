@@ -153,14 +153,16 @@ static void ps3_gap_event_handle(UINT16 gap_handle, UINT16 event)
 {
     switch(event){
         case GAP_EVT_CONN_OPENED:
-        case GAP_EVT_CONN_CLOSED:
+        case GAP_EVT_CONN_CLOSED:{
+            uint8_t was_connected = is_connected;
             ps3_gap_update_connected();
 
-            if (is_connected) {
-                ps3Enable();
+            if(was_connected != is_connected){
+                ps3_connect_event(is_connected);
             }
 
             break;
+        }
 
         case GAP_EVT_CONN_DATA_AVAIL: {
             BT_HDR *p_buf;

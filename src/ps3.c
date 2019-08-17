@@ -17,6 +17,11 @@ static const uint8_t hid_cmd_payload_led_arguments[] = { 0xff, 0x27, 0x10, 0x00,
 /*                         L O C A L    V A R I A B L E S                       */
 /********************************************************************************/
 
+static ps3_connection_callback_t ps3_connection_cb = NULL;
+static ps3_connection_object_callback_t ps3_connection_object_cb = NULL;
+static void *ps3_connection_object = NULL;
+
+
 static ps3_event_callback_t ps3_event_cb = NULL;
 static ps3_event_object_callback_t ps3_event_object_cb = NULL;
 static void *ps3_event_object = NULL;
@@ -145,6 +150,41 @@ void ps3SetLed( uint8_t led )
     ps3Cmd(cmd);
 }
 
+
+/*******************************************************************************
+**
+** Function         ps3SetConnectionCallback
+**
+** Description      Registers a callback for receiving PS3 controller
+**                  connection notifications
+**
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3SetConnectionCallback( ps3_connection_callback_t cb )
+{
+    ps3_connection_cb = cb;
+}
+
+
+/*******************************************************************************
+**
+** Function         ps3SetConnectionObjectCallback
+**
+** Description      Registers a callback for receiving PS3 controller
+**                  connection notifications
+**
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3SetConnectionObjectCallback( void *object, ps3_connection_object_callback_t cb )
+{
+    ps3_connection_object_cb = cb;
+    ps3_connection_object = object;
+}
+
 /*******************************************************************************
 **
 ** Function         ps3SetEventCallback
@@ -202,6 +242,24 @@ void ps3SetBluetoothMacAddress( const uint8_t *mac )
 /********************************************************************************/
 /*                      L O C A L    F U N C T I O N S                          */
 /********************************************************************************/
+
+void ps3_connect_event( uint8_t is_connected )
+{
+    if(is_connected){
+        ps3Enable();
+    }
+
+    if(ps3_connection_cb != NULL)
+    {
+        ps3_connection_cb( is_connected );
+    }
+
+    if(ps3_connection_object_cb != NULL && ps3_connection_object != NULL)
+    {
+        ps3_connection_object_cb( ps3_connection_object, is_connected );
+    }
+}
+
 
 void ps3_packet_event( ps3_t ps3, ps3_event_t event )
 {

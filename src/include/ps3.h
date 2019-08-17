@@ -152,6 +152,9 @@ typedef struct {
 /*    C A L L B A C K S    */
 /***************************/
 
+typedef void(*ps3_connection_callback_t)( uint8_t is_connected );
+typedef void(*ps3_connection_object_callback_t)( void *object, uint8_t is_connected );
+
 typedef void(*ps3_event_callback_t)( ps3_t ps3, ps3_event_t event );
 typedef void(*ps3_event_object_callback_t)( void *object, ps3_t ps3, ps3_event_t event );
 
@@ -164,6 +167,8 @@ bool ps3IsConnected();
 void ps3Init();
 void ps3Enable();
 void ps3Cmd( ps3_cmd_t ps3_cmd );
+void ps3SetConnectionCallback( ps3_connection_callback_t cb );
+void ps3SetConnectionObjectCallback( void *object, ps3_connection_object_callback_t cb );
 void ps3SetEventCallback( ps3_event_callback_t cb );
 void ps3SetEventObjectCallback( void *object, ps3_event_object_callback_t cb );
 void ps3SetLed( uint8_t led );

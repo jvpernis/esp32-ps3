@@ -91,6 +91,7 @@ enum ps3_led_mask {
 /*                     C A L L B A C K   F U N C T I O N S                      */
 /********************************************************************************/
 
+void ps3_connect_event(uint8_t is_connected);
 void ps3_packet_event( ps3_t ps3, ps3_event_t event );
 
 
