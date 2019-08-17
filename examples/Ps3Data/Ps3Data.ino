@@ -1,7 +1,5 @@
 #include <Ps3Controller.h>
 
-bool stateIsConnected = false;
-
 void setup()
 {
     Serial.begin(115200);
@@ -11,15 +9,7 @@ void setup()
 
 void loop()
 {
-    if(stateIsConnected == false){
-
-        if (Ps3.isConnected()){
-            delay(250);    // ToDo: the ps3 library should handle this delay
-            Ps3.setLed(1); // ToDo: the ps3 library should set LED 1 on connect by default
-            stateIsConnected = true;
-        }
-
-    }else{
+    if(stateIsConnected){
 
         if( Ps3.data.button.cross ){
             Serial.println("Pressing the cross button");

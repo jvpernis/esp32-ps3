@@ -20,8 +20,6 @@ void notify()
 }
 
 void onConnect(){
-  delay(250);    // ToDo: the ps3 library should handle this delay
-  Ps3.setLed(1); // ToDo: the ps3 library should set LED 1 on connect by default
   Serial.println("Connected!.");
 }
 
