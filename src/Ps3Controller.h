@@ -29,10 +29,16 @@ class Ps3Controller
         void setLed(int led);
 
         void attach(callback_t callback);
+        void attachOnConnect(callback_t callback);
+        void attachOnDisconnect(callback_t callback);
 
     private:
         static void _event_callback(void *object, ps3_t data, ps3_event_t event);
-        callback_t _callback = nullptr;
+        static void _connection_callback(void *object, uint8_t is_connected);
+
+        callback_t _callback_event = nullptr;
+        callback_t _callback_connect = nullptr;
+        callback_t _callback_disconnect = nullptr;
 
 };
 

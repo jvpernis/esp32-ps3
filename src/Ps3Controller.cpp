@@ -17,6 +17,7 @@ Ps3Controller::Ps3Controller()
 bool Ps3Controller::begin()
 {
     ps3SetEventObjectCallback(this, &Ps3Controller::_event_callback);
+    ps3SetConnectionObjectCallback(this, &Ps3Controller::_connection_callback);
 
     if(!btStarted() && !btStart()){
         log_e("btStart failed");
@@ -84,7 +85,20 @@ void Ps3Controller::setLed(int led)
 
 void Ps3Controller::attach(callback_t callback)
 {
-    _callback = callback;
+    _callback_event = callback;
+
+}
+
+
+void Ps3Controller::attachOnConnect(callback_t callback)
+{
+    _callback_connect = callback;
+
+}
+
+void Ps3Controller::attachOnDisconnect(callback_t callback)
+{
+    _callback_disconnect = callback;
 
 }
 
@@ -96,9 +110,28 @@ void Ps3Controller::_event_callback(void *object, ps3_t data, ps3_event_t event)
     memcpy(&This->data, &data, sizeof(ps3_t));
     memcpy(&This->event, &event, sizeof(ps3_event_t));
 
-    if (This->_callback){
-        This->_callback();
+    if (This->_callback_event){
+        This->_callback_event();
     }
+}
+
+
+void Ps3Controller::_connection_callback(void *object, uint8_t is_connected)
+{
+    Ps3Controller* This = (Ps3Controller*) object;
+
+    if (is_connected)
+    {
+        if (This->_callback_connect){
+            This->_callback_connect();
+        }
+    }else
+    {
+        if (This->_callback_disconnect){
+            This->_callback_disconnect();
+        }
+    }
+
 }
 
 #if !defined(NO_GLOBAL_INSTANCES)
