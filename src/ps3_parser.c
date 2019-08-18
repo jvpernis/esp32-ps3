@@ -35,7 +35,7 @@ enum ps3_packet_index {
     ps3_packet_index_analog_button_cross = 34,
     ps3_packet_index_analog_button_square = 35,
 
-    ps3_packet_index_status = 38,
+    ps3_packet_index_status = 39,
 
     ps3_packet_index_sensor_accelerometer_x = 51,
     ps3_packet_index_sensor_accelerometer_y = 53,
@@ -260,7 +260,6 @@ ps3_status_t ps3_parse_packet_status( uint8_t *packet )
 {
     ps3_status_t ps3_status;
 
-    //TODO: Verify if this is correct
     ps3_status.charging   =  packet[ps3_packet_index_status+0] ? true: false;
     ps3_status.battery    =  packet[ps3_packet_index_status+1];
     ps3_status.connection = (packet[ps3_packet_index_status+2] & ps3_status_mask_bluetooth) ? ps3_status_connection_bluetooth : ps3_status_connection_usb;
