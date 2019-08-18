@@ -260,8 +260,8 @@ ps3_status_t ps3_parse_packet_status( uint8_t *packet )
 {
     ps3_status_t ps3_status;
 
-    ps3_status.charging   =  packet[ps3_packet_index_status+0] ? true: false;
     ps3_status.battery    =  packet[ps3_packet_index_status+1];
+    ps3_status.charging   =  ps3_status.battery == ps3_status_battery_charging;
     ps3_status.connection = (packet[ps3_packet_index_status+2] & ps3_status_mask_bluetooth) ? ps3_status_connection_bluetooth : ps3_status_connection_usb;
     ps3_status.rumbling   = (packet[ps3_packet_index_status+2] & ps3_status_mask_rumbling) ? false: true;
 
