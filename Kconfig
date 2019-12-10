@@ -1,4 +1,4 @@
-menu PS3
+menu 'PS3'
 
     choice IDF_COMPATIBILITY
         prompt "Framework compatibility"
