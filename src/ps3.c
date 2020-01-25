@@ -26,6 +26,8 @@ static ps3_event_callback_t ps3_event_cb = NULL;
 static ps3_event_object_callback_t ps3_event_object_cb = NULL;
 static void *ps3_event_object = NULL;
 
+static bool is_active = false;
+
 
 /********************************************************************************/
 /*                      P U B L I C    F U N C T I O N S                        */
@@ -62,7 +64,7 @@ void ps3Init()
 *******************************************************************************/
 bool ps3IsConnected()
 {
-    return ps3_gap_is_connected();
+    return is_active;
 }
 
 
@@ -260,29 +262,37 @@ void ps3_connect_event( uint8_t is_connected )
 {
     if(is_connected){
         ps3Enable();
-    }
-
-    if(ps3_connection_cb != NULL)
-    {
-        ps3_connection_cb( is_connected );
-    }
-
-    if(ps3_connection_object_cb != NULL && ps3_connection_object != NULL)
-    {
-        ps3_connection_object_cb( ps3_connection_object, is_connected );
+    }else{
+        is_active = false;
     }
 }
 
 
 void ps3_packet_event( ps3_t ps3, ps3_event_t event )
 {
-    if(ps3_event_cb != NULL)
-    {
-        ps3_event_cb( ps3, event );
-    }
+    // Trigger packet event, but if this is the very first packet
+    // after connecting, trigger a connection event instead
+    if(is_active){
+        if(ps3_event_cb != NULL)
+        {
+            ps3_event_cb( ps3, event );
+        }
 
-    if(ps3_event_object_cb != NULL && ps3_event_object != NULL)
-    {
-        ps3_event_object_cb( ps3_event_object, ps3, event );
+        if(ps3_event_object_cb != NULL && ps3_event_object != NULL)
+        {
+            ps3_event_object_cb( ps3_event_object, ps3, event );
+        }
+    }else{
+        is_active = true;
+
+        if(ps3_connection_cb != NULL)
+        {
+            ps3_connection_cb( is_active );
+        }
+
+        if(ps3_connection_object_cb != NULL && ps3_connection_object != NULL)
+        {
+            ps3_connection_object_cb( ps3_connection_object, is_active );
+        }
     }
 }

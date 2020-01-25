@@ -122,8 +122,6 @@ void Ps3Controller::_connection_callback(void *object, uint8_t is_connected)
 
     if (is_connected)
     {
-        delay(250);    // ToDo: figure out how to know when the channel is free again so this delay can be removed
-
         // Set LED1 by default
         This->setPlayer(1);
 
