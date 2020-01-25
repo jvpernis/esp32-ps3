@@ -1,10 +1,46 @@
 #ifndef PS3_INT_H
 #define PS3_INT_H
 
+#include "sdkconfig.h"
+
+/** Check if the project is configured properly */
+#ifndef ARDUINO_ARCH_ESP32
+
+#ifndef CONFIG_BT_ENABLED
+#error "The ESP32-PS3 module requires the Bluetooth component to be enabled in the project's menuconfig"
+#endif
+
+#ifndef CONFIG_BLUEDROID_ENABLED
+#error "The ESP32-PS3 module requires Bluedroid to be enabled in the project's menuconfig"
+#endif
+
+#ifndef CONFIG_CLASSIC_BT_ENABLED
+#error "The ESP32-PS3 module requires Classic Bluetooth to be enabled in the project's menuconfig"
+#endif
+
+#ifndef CONFIG_BT_SPP_ENABLED
+#error "The ESP32-PS3 module requires Classic Bluetooth's SPP to be enabled in the project's menuconfig"
+#endif
+
+/** Check the configured blueooth mode */
+#ifdef CONFIG_BTDM_CONTROLLER_MODE_BTDM
+#define BT_MODE ESP_BT_MODE_BTDM
+#elif defined CONFIG_BTDM_CONTROLLER_MODE_BR_EDR_ONLY
+#define BT_MODE ESP_BT_MODE_CLASSIC_BT
+#else
+#error "The selected Bluetooth controller mode is not supported by the ESP32-PS3 module"
+#endif
+
+#endif // ARDUINO_ARCH_ESP32
+
 /** ESP-IDF compatibility configuration option choices */
 #define IDF_COMPATIBILITY_MASTER_21165ED 3
 #define IDF_COMPATIBILITY_MASTER_D9CE0BB 2
 #define IDF_COMPATIBILITY_MASTER_21AF1D7 1
+
+#ifndef CONFIG_IDF_COMPATIBILITY
+#define CONFIG_IDF_COMPATIBILITY IDF_COMPATIBILITY_MASTER_21AF1D7
+#endif
 
 /** Size of the output report buffer for the Dualshock and Navigation controllers */
 #define PS3_REPORT_BUFFER_SIZE 48
@@ -53,11 +89,19 @@ enum ps3_led_mask {
     ps3_led_mask_led4 = 1 << 4,
 };
 
+
+/********************************************************************************/
+/*                     C A L L B A C K   F U N C T I O N S                      */
+/********************************************************************************/
+
+void ps3_connect_event(uint8_t is_connected);
+void ps3_packet_event( ps3_t ps3, ps3_event_t event );
+
+
 /********************************************************************************/
 /*                      P A R S E R   F U N C T I O N S                         */
 /********************************************************************************/
 
-void ps3_parser_set_event_cb( ps3_event_callback_t cb );
 void ps3_parse_packet( uint8_t *packet );
 
 

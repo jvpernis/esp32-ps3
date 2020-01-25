@@ -1,7 +1,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#include "ps3.h"
+#include "include/ps3.h"
+#include "include/ps3_int.h"
 #include "esp_log.h"
 
 #define  PS3_TAG "PS3_PARSER"
@@ -34,7 +35,7 @@ enum ps3_packet_index {
     ps3_packet_index_analog_button_cross = 34,
     ps3_packet_index_analog_button_square = 35,
 
-    ps3_packet_index_status = 38,
+    ps3_packet_index_status = 39,
 
     ps3_packet_index_sensor_accelerometer_x = 51,
     ps3_packet_index_sensor_accelerometer_y = 53,
@@ -67,8 +68,8 @@ enum ps3_button_mask {
 };
 
 enum ps3_status_mask {
-    ps3_status_mask_bluetooth = 0x02,
-    ps3_status_mask_rumbling = 0x04
+    ps3_status_mask_rumbling = 0x02,
+    ps3_status_mask_bluetooth = 0x04
 };
 
 
@@ -89,7 +90,8 @@ ps3_event_t ps3_parse_event( ps3_t prev, ps3_t cur );
 /********************************************************************************/
 
 static ps3_t ps3;
-static ps3_event_callback_t ps3_event_cb;
+static ps3_event_callback_t ps3_event_cb = NULL;
+
 
 /********************************************************************************/
 /*                      P U B L I C    F U N C T I O N S                        */
@@ -98,7 +100,6 @@ void ps3_parser_set_event_cb( ps3_event_callback_t cb )
 {
     ps3_event_cb = cb;
 }
-
 
 void ps3_parse_packet( uint8_t *packet )
 {
@@ -110,11 +111,10 @@ void ps3_parse_packet( uint8_t *packet )
     ps3.sensor        = ps3_parse_packet_sensor(packet);
     ps3.status        = ps3_parse_packet_status(packet);
 
-    if(ps3_event_cb)
-    {
-        ps3_event_t ps3_event = ps3_parse_event( prev_ps3, ps3 );
-        ps3_event_cb( ps3, ps3_event );
-    }
+    ps3_event_t ps3_event = ps3_parse_event( prev_ps3, ps3 );
+
+    ps3_packet_event( ps3, ps3_event );
+
 
 }
 
@@ -176,6 +176,26 @@ ps3_event_t ps3_parse_event( ps3_t prev, ps3_t cur )
 
     ps3_event.button_up.ps       = prev.button.ps       && !cur.button.ps;
 
+    /* Analog events */
+    ps3_event.analog_changed.stick.lx        = cur.analog.stick.lx - prev.analog.stick.lx;
+    ps3_event.analog_changed.stick.ly        = cur.analog.stick.ly - prev.analog.stick.ly;
+    ps3_event.analog_changed.stick.rx        = cur.analog.stick.rx - prev.analog.stick.rx;
+    ps3_event.analog_changed.stick.ry        = cur.analog.stick.ry - prev.analog.stick.ry;
+
+    ps3_event.analog_changed.button.up       = cur.analog.button.up    - prev.analog.button.up;
+    ps3_event.analog_changed.button.right    = cur.analog.button.right - prev.analog.button.right;
+    ps3_event.analog_changed.button.down     = cur.analog.button.down  - prev.analog.button.down;
+    ps3_event.analog_changed.button.left     = cur.analog.button.left  - prev.analog.button.left;
+
+    ps3_event.analog_changed.button.l2       = cur.analog.button.l2 - prev.analog.button.l2;
+    ps3_event.analog_changed.button.r2       = cur.analog.button.r2 - prev.analog.button.r2;
+    ps3_event.analog_changed.button.l1       = cur.analog.button.l1 - prev.analog.button.l1;
+    ps3_event.analog_changed.button.r1       = cur.analog.button.r1 - prev.analog.button.r1;
+
+    ps3_event.analog_changed.button.triangle = cur.analog.button.triangle - prev.analog.button.triangle;
+    ps3_event.analog_changed.button.circle   = cur.analog.button.circle   - prev.analog.button.circle;
+    ps3_event.analog_changed.button.cross    = cur.analog.button.cross    - prev.analog.button.cross;
+    ps3_event.analog_changed.button.square   = cur.analog.button.square   - prev.analog.button.square;
 
     return ps3_event;
 }
@@ -260,11 +280,10 @@ ps3_status_t ps3_parse_packet_status( uint8_t *packet )
 {
     ps3_status_t ps3_status;
 
-    //TODO: Verify if this is correct
-    ps3_status.charging   =  packet[ps3_packet_index_status+0] ? true: false;
     ps3_status.battery    =  packet[ps3_packet_index_status+1];
+    ps3_status.charging   =  ps3_status.battery == ps3_status_battery_charging;
     ps3_status.connection = (packet[ps3_packet_index_status+2] & ps3_status_mask_bluetooth) ? ps3_status_connection_bluetooth : ps3_status_connection_usb;
-    ps3_status.rumbling   = (packet[ps3_packet_index_status+2] & ps3_status_mask_rumbling) ? true : false;
+    ps3_status.rumbling   = (packet[ps3_packet_index_status+2] & ps3_status_mask_rumbling) ? false: true;
 
     return ps3_status;
 }

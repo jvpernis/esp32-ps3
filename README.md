@@ -5,6 +5,7 @@ Control your ESP32 projects with a PS3 controller!
 
 This library is meant to be used with Espressif's [ESP-IDF](https://github.com/espressif/esp-idf) IoT Development Framework.
 
+However, Arduino is supported too!
 
 Pairing the PS3 Controller:
 ==============
@@ -14,13 +15,62 @@ Therefore, if you want to connect your PS3 controller to the ESP32, you either n
 
 Whichever path you choose, you're going to need a tool to read and/or write the currently paired MAC address from the PS3 controller. I used [SixaxisPairTool](https://dancingpixelstudios.com/sixaxis-controller/sixaxispairtool/) for this, but you can try using [sixaxispairer](https://github.com/user-none/sixaxispairer) as well, if open source is important to you.
 
-If you opted to change the ESP32's MAC address, you'll need to include this snippet in your code **before** calling ```ps3Init()```, where the MAC address should match with the one stored on the PS3 controller:
+**Note for ESP-IDF:** If you opted to change the ESP32's MAC address, you'll need to include this snippet in your code **before** calling ```ps3Init()```, where the MAC address should match with the one stored on the PS3 controller:
 ```c
 uint8_t new_mac[8] = {0x01,0x02,0x03,0x04,0x05,0x06};
 ps3SetBluetoothMacAddress(new_mac);
 ```
 
-Getting Started
+Getting Started with Arduino
+==============
+
+### Installing the ESP32 board ###
+
+In case you haven't yet, you can add the ESP32 boards to your Arduino IDE by adding them to the Boards Manager: Open `File -> Preferences`, and paste the following URL in the `Additional Boards Manager URLs` field:
+
+- `https://dl.espressif.com/dl/package_esp32_index.json`
+
+Open the Boards Manager with `Tools -> Board: "xxx" -> Boards Manager`, look for `esp32` (probably the last one in the list), and click `Install`.
+
+Finally, select the ESP32 board you have with `Tools -> Board: "xxx"` under the section `ESP32 Arduino` (I always have `ESP32 Dev Module` selected).
+
+
+### Installing the library ###
+
+You can install the Arduino library from within the Arduino IDE. Open the Library Manager with `Sketch -> Include Library -> Manage Libraries...`.
+
+Search for `PS3 Controller Host`, and click `Install`.
+
+### Using the library ###
+
+To use this library in your sketch, include it with `Sketch -> Include Library -> PS3 Controller Host`.
+
+You can initialize the library using `Ps3.begin(mac)`, passing a string with the MAC address stored in the PS3 Controller. Your sketch would then look like this:
+```c
+#include <Ps3Controller.h>
+
+void setup()
+{
+    Ps3.begin("01:02:03:04:05:06");
+}
+```
+
+### Examples
+
+In order to learn more about how to use this library, please refer to the example sketches in the Arduino IDE with `File -> Examples -> PS3 Controller Host`:
+
+- Try to connect to the PS3 controller first with the `Ps3Connect` sketch.
+
+- Take a look at the `Ps3Data` sketch to see how you can access the controller data values.
+
+- Take a look at the `Ps3DataNotify` to see how you can attach a notification function which gets triggered every time new data is received from the PS3 controller. This allows your code to quickly react on controller input even when you have multiple `delay()` calls in your `loop()`.
+
+- The `Ps3Demo` sketch showcases how to access (almost) all of the controller data made available by this library.
+
+- Finally, `Ps3Accelerometer` allows you to draw live graphs of the accelerometer data inside the PS3 controller by using `Tools -> Serial Plotter`.
+
+
+Getting Started with ESP-IDF
 ==============
 
 ### Installing the library ###

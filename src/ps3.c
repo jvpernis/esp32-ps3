@@ -2,8 +2,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <esp_system.h>
-#include "ps3.h"
-#include "ps3_int.h"
+#include "include/ps3.h"
+#include "include/ps3_int.h"
 
 /********************************************************************************/
 /*                              C O N S T A N T S                               */
@@ -11,6 +11,22 @@
 
 static const uint8_t hid_cmd_payload_ps3_enable[] = { 0x42, 0x03, 0x00, 0x00 };
 static const uint8_t hid_cmd_payload_led_arguments[] = { 0xff, 0x27, 0x10, 0x00, 0x32 };
+
+
+/********************************************************************************/
+/*                         L O C A L    V A R I A B L E S                       */
+/********************************************************************************/
+
+static ps3_connection_callback_t ps3_connection_cb = NULL;
+static ps3_connection_object_callback_t ps3_connection_object_cb = NULL;
+static void *ps3_connection_object = NULL;
+
+
+static ps3_event_callback_t ps3_event_cb = NULL;
+static ps3_event_object_callback_t ps3_event_object_cb = NULL;
+static void *ps3_event_object = NULL;
+
+static bool is_active = false;
 
 
 /********************************************************************************/
@@ -48,7 +64,7 @@ void ps3Init()
 *******************************************************************************/
 bool ps3IsConnected()
 {
-    return ps3_gap_is_connected();
+    return is_active;
 }
 
 
@@ -118,22 +134,70 @@ void ps3Cmd( ps3_cmd_t cmd )
 **
 ** Function         ps3SetLed
 **
-** Description      Sets one of the LEDs on the PS3 controller.
+** Description      Sets the LEDs on the PS3 controller to the player
+**                  number. Up to 10 players are supported.
 **
 **
 ** Returns          void
 **
 *******************************************************************************/
-void ps3SetLed( uint8_t led )
+void ps3SetLed( uint8_t player )
 {
     ps3_cmd_t cmd = {0};
 
-    cmd.led1 = led == 1;
-    cmd.led2 = led == 2;
-    cmd.led3 = led == 3;
-    cmd.led4 = led == 4;
+    //           led4  led3  led2  led1
+    // player 1                    1
+    // player 2              1
+    // player 3        1
+    // player 4  1
+    // player 5  1                 1
+    // player 6  1           1
+    // player 7  1     1
+    // player 8  1     1           1
+    // player 9  1     1     1
+    // player 10 1     1     1     1
+
+    if(cmd.led4 = player >= 4) player -= 4;
+    if(cmd.led3 = player >= 3) player -= 3;
+    if(cmd.led2 = player >= 2) player -= 2;
+    if(cmd.led1 = player >= 1) player -= 1;
 
     ps3Cmd(cmd);
+}
+
+
+/*******************************************************************************
+**
+** Function         ps3SetConnectionCallback
+**
+** Description      Registers a callback for receiving PS3 controller
+**                  connection notifications
+**
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3SetConnectionCallback( ps3_connection_callback_t cb )
+{
+    ps3_connection_cb = cb;
+}
+
+
+/*******************************************************************************
+**
+** Function         ps3SetConnectionObjectCallback
+**
+** Description      Registers a callback for receiving PS3 controller
+**                  connection notifications
+**
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3SetConnectionObjectCallback( void *object, ps3_connection_object_callback_t cb )
+{
+    ps3_connection_object_cb = cb;
+    ps3_connection_object = object;
 }
 
 /*******************************************************************************
@@ -148,7 +212,24 @@ void ps3SetLed( uint8_t led )
 *******************************************************************************/
 void ps3SetEventCallback( ps3_event_callback_t cb )
 {
-    ps3_parser_set_event_cb(cb);
+    ps3_event_cb = cb;
+}
+
+
+/*******************************************************************************
+**
+** Function         ps3SetEventObjectCallback
+**
+** Description      Registers a callback for receiving PS3 controller events
+**
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3SetEventObjectCallback( void *object, ps3_event_object_callback_t cb )
+{
+    ps3_event_object_cb = cb;
+    ps3_event_object = object;
 }
 
 
@@ -170,4 +251,48 @@ void ps3SetBluetoothMacAddress( const uint8_t *mac )
     memcpy(base_mac, mac, 6);
     base_mac[5] -= 2;
     esp_base_mac_addr_set(base_mac);
+}
+
+
+/********************************************************************************/
+/*                      L O C A L    F U N C T I O N S                          */
+/********************************************************************************/
+
+void ps3_connect_event( uint8_t is_connected )
+{
+    if(is_connected){
+        ps3Enable();
+    }else{
+        is_active = false;
+    }
+}
+
+
+void ps3_packet_event( ps3_t ps3, ps3_event_t event )
+{
+    // Trigger packet event, but if this is the very first packet
+    // after connecting, trigger a connection event instead
+    if(is_active){
+        if(ps3_event_cb != NULL)
+        {
+            ps3_event_cb( ps3, event );
+        }
+
+        if(ps3_event_object_cb != NULL && ps3_event_object != NULL)
+        {
+            ps3_event_object_cb( ps3_event_object, ps3, event );
+        }
+    }else{
+        is_active = true;
+
+        if(ps3_connection_cb != NULL)
+        {
+            ps3_connection_cb( is_active );
+        }
+
+        if(ps3_connection_object_cb != NULL && ps3_connection_object != NULL)
+        {
+            ps3_connection_object_cb( ps3_connection_object, is_active );
+        }
+    }
 }

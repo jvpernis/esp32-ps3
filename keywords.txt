@@ -1,0 +1,14 @@
+
+Ps3Controller	KEYWORD1
+Ps3	KEYWORD1
+
+begin	KEYWORD2
+end	KEYWORD2
+isConnected	KEYWORD2
+setPlayer	KEYWORD2
+attach	KEYWORD2
+attachOnConnect	KEYWORD2
+attachOnDisconnect	KEYWORD2
+
+data	KEYWORD3
+event	KEYWORD3
