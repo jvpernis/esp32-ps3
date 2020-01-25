@@ -5,7 +5,7 @@ Ps3	KEYWORD1
 begin	KEYWORD2
 end	KEYWORD2
 isConnected	KEYWORD2
-setLed	KEYWORD2
+setPlayer	KEYWORD2
 attach	KEYWORD2
 attachOnConnect	KEYWORD2
 attachOnDisconnect	KEYWORD2

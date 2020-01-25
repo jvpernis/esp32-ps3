@@ -76,9 +76,9 @@ bool Ps3Controller::isConnected()
 }
 
 
-void Ps3Controller::setLed(int led)
+void Ps3Controller::setPlayer(int player)
 {
-    ps3SetLed(led);
+    ps3SetLed(player);
 
 }
 
@@ -125,7 +125,7 @@ void Ps3Controller::_connection_callback(void *object, uint8_t is_connected)
         delay(250);    // ToDo: figure out how to know when the channel is free again so this delay can be removed
 
         // Set LED1 by default
-        This->setLed(1);
+        This->setPlayer(1);
 
         if (This->_callback_connect){
             This->_callback_connect();

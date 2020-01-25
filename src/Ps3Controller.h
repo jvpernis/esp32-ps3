@@ -26,7 +26,7 @@ class Ps3Controller
 
         bool isConnected();
 
-        void setLed(int led);
+        void setPlayer(int player);
 
         void attach(callback_t callback);
         void attachOnConnect(callback_t callback);
