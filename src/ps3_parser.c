@@ -176,6 +176,26 @@ ps3_event_t ps3_parse_event( ps3_t prev, ps3_t cur )
 
     ps3_event.button_up.ps       = prev.button.ps       && !cur.button.ps;
 
+    /* Analog events */
+    ps3_event.analog_changed.stick.lx        = cur.analog.stick.lx - prev.analog.stick.lx;
+    ps3_event.analog_changed.stick.ly        = cur.analog.stick.ly - prev.analog.stick.ly;
+    ps3_event.analog_changed.stick.rx        = cur.analog.stick.rx - prev.analog.stick.rx;
+    ps3_event.analog_changed.stick.ry        = cur.analog.stick.ry - prev.analog.stick.ry;
+
+    ps3_event.analog_changed.button.up       = cur.analog.button.up    - prev.analog.button.up;
+    ps3_event.analog_changed.button.right    = cur.analog.button.right - prev.analog.button.right;
+    ps3_event.analog_changed.button.down     = cur.analog.button.down  - prev.analog.button.down;
+    ps3_event.analog_changed.button.left     = cur.analog.button.left  - prev.analog.button.left;
+
+    ps3_event.analog_changed.button.l2       = cur.analog.button.l2 - prev.analog.button.l2;
+    ps3_event.analog_changed.button.r2       = cur.analog.button.r2 - prev.analog.button.r2;
+    ps3_event.analog_changed.button.l1       = cur.analog.button.l1 - prev.analog.button.l1;
+    ps3_event.analog_changed.button.r1       = cur.analog.button.r1 - prev.analog.button.r1;
+
+    ps3_event.analog_changed.button.triangle = cur.analog.button.triangle - prev.analog.button.triangle;
+    ps3_event.analog_changed.button.circle   = cur.analog.button.circle   - prev.analog.button.circle;
+    ps3_event.analog_changed.button.cross    = cur.analog.button.cross    - prev.analog.button.cross;
+    ps3_event.analog_changed.button.square   = cur.analog.button.square   - prev.analog.button.square;
 
     return ps3_event;
 }
