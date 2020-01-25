@@ -132,20 +132,33 @@ void ps3Cmd( ps3_cmd_t cmd )
 **
 ** Function         ps3SetLed
 **
-** Description      Sets one of the LEDs on the PS3 controller.
+** Description      Sets the LEDs on the PS3 controller to the player
+**                  number. Up to 10 players are supported.
 **
 **
 ** Returns          void
 **
 *******************************************************************************/
-void ps3SetLed( uint8_t led )
+void ps3SetLed( uint8_t player )
 {
     ps3_cmd_t cmd = {0};
 
-    cmd.led1 = led == 1;
-    cmd.led2 = led == 2;
-    cmd.led3 = led == 3;
-    cmd.led4 = led == 4;
+    //           led4  led3  led2  led1
+    // player 1                    1
+    // player 2              1
+    // player 3        1
+    // player 4  1
+    // player 5  1                 1
+    // player 6  1           1
+    // player 7  1     1
+    // player 8  1     1           1
+    // player 9  1     1     1
+    // player 10 1     1     1     1
+
+    if(cmd.led4 = player >= 4) player -= 4;
+    if(cmd.led3 = player >= 3) player -= 3;
+    if(cmd.led2 = player >= 2) player -= 2;
+    if(cmd.led1 = player >= 1) player -= 1;
 
     ps3Cmd(cmd);
 }
