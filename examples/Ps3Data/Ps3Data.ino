@@ -9,7 +9,7 @@ void setup()
 
 void loop()
 {
-    if(stateIsConnected){
+    if(Ps3.isConnected()){
 
         if( Ps3.data.button.cross ){
             Serial.println("Pressing the cross button");
