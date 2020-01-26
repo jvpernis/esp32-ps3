@@ -157,10 +157,10 @@ void ps3SetLed( uint8_t player )
     // player 9  1     1     1
     // player 10 1     1     1     1
 
-    if(cmd.led4 = player >= 4) player -= 4;
-    if(cmd.led3 = player >= 3) player -= 3;
-    if(cmd.led2 = player >= 2) player -= 2;
-    if(cmd.led1 = player >= 1) player -= 1;
+    if( (cmd.led4 = player >= 4) != 0 ) player -= 4;
+    if( (cmd.led3 = player >= 3) != 0 ) player -= 3;
+    if( (cmd.led2 = player >= 2) != 0 ) player -= 2;
+    if( (cmd.led1 = player >= 1) != 0 ) player -= 1;
 
     ps3Cmd(cmd);
 }
