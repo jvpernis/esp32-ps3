@@ -25,6 +25,7 @@
 /********************************************************************************/
 
 static void ps3_l2cap_init_service( char *name, uint16_t psm, uint8_t security_id);
+static void ps3_l2cap_deinit_service( char *name, uint16_t psm );
 static void ps3_l2cap_connect_ind_cback (BD_ADDR  bd_addr, uint16_t l2cap_cid, uint16_t psm, uint8_t l2cap_id);
 static void ps3_l2cap_connect_cfm_cback (uint16_t l2cap_cid, uint16_t result);
 static void ps3_l2cap_config_ind_cback (uint16_t l2cap_cid, tL2CAP_CFG_INFO *p_cfg);
@@ -75,6 +76,21 @@ void ps3_l2cap_init_services()
 {
     ps3_l2cap_init_service( "PS3-HIDC", BT_PSM_HIDC, BTM_SEC_SERVICE_FIRST_EMPTY   );
     ps3_l2cap_init_service( "PS3-HIDI", BT_PSM_HIDI, BTM_SEC_SERVICE_FIRST_EMPTY+1 );
+}
+
+/*******************************************************************************
+**
+** Function         ps3_l2cap_deinit_services
+**
+** Description      This function deinitialises the required L2CAP services.
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3_l2cap_deinit_services()
+{
+    ps3_l2cap_deinit_service( "PS3-HIDC", BT_PSM_HIDC );
+    ps3_l2cap_deinit_service( "PS3-HIDI", BT_PSM_HIDI );
 }
 
 
@@ -145,6 +161,22 @@ static void ps3_l2cap_init_service( char *name, uint16_t psm, uint8_t security_i
     }
 
     ESP_LOGI(PS3_TAG, "[%s] Service %s Initialized", __func__, name);
+}
+
+/*******************************************************************************
+**
+** Function         ps3_l2cap_deinit_service
+**
+** Description      This deregisters the specified bluetooth service.
+**
+** Returns          void
+**
+*******************************************************************************/
+static void ps3_l2cap_deinit_service( char *name, uint16_t psm )
+{
+    /* Deregister the PSM from incoming connections */
+    L2CA_Deregister(psm);
+    ESP_LOGI(PS3_TAG, "[%s] Service %s Deinitialized", __func__, name);
 }
 
 

@@ -110,6 +110,7 @@ void ps3_parse_packet( uint8_t *packet );
 /********************************************************************************/
 
 void ps3_spp_init();
+void ps3_spp_deinit();
 
 
 /********************************************************************************/
@@ -117,6 +118,7 @@ void ps3_spp_init();
 /********************************************************************************/
 
 void ps3_l2cap_init_services();
+void ps3_l2cap_deinit_services();
 void ps3_l2cap_send_hid( hid_cmd_t *hid_cmd, uint8_t len );
 
 #endif

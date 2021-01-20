@@ -69,8 +69,8 @@ bool Ps3Controller::begin(const char *mac)
 
 bool Ps3Controller::end()
 {
-    // TODO
-
+    ps3Deinit();
+    return true;
 }
 
 

@@ -77,6 +77,50 @@ void ps3_spp_init()
 }
 
 
+/*******************************************************************************
+**
+** Function         ps3_spp_deinit
+**
+** Description      Deinitialise the SPP server
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3_spp_deinit()
+{
+
+    esp_err_t ret;
+
+    if ((ret = esp_spp_deinit()) != ESP_OK) {
+        ESP_LOGE(PS3_TAG, "%s spp deinit failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+
+#ifndef ARDUINO_ARCH_ESP32
+    if ((ret = esp_bluedroid_disable()) != ESP_OK) {
+        ESP_LOGE(PS3_TAG, "%s disable bluedroid failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+
+    if ((ret = esp_bluedroid_deinit()) != ESP_OK) {
+        ESP_LOGE(PS3_TAG, "%s deinitialize bluedroid failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+
+    if ((ret = esp_bt_controller_disable()) != ESP_OK) {
+        ESP_LOGE(PS3_TAG, "%s disable controller failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+
+    if ((ret = esp_bt_controller_deinit()) != ESP_OK) {
+        ESP_LOGE(PS3_TAG, "%s deinitialize controller failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+#endif
+}
+
+
+
 /********************************************************************************/
 /*                      L O C A L    F U N C T I O N S                          */
 /********************************************************************************/

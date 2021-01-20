@@ -50,6 +50,23 @@ void ps3Init()
     ps3_l2cap_init_services();
 }
 
+/*******************************************************************************
+**
+** Function         ps3Deinit
+**
+** Description      This deinitializes the bluetooth services to stop
+**                  listening for incoming connections.
+**
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3Deinit()
+{
+    ps3_l2cap_deinit_services();
+    ps3_spp_deinit();
+}
+
 
 /*******************************************************************************
 **
