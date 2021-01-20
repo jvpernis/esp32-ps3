@@ -2,8 +2,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#include "ps3.h"
-#include "ps3_int.h"
+#include "include/ps3.h"
+#include "include/ps3_int.h"
 #include "esp_log.h"
 #include "esp_bt.h"
 #include "esp_bt_main.h"
@@ -139,7 +139,7 @@ static void ps3_l2cap_init_service( char *name, uint16_t psm, uint8_t security_i
     }
 
     /* Register with the Security Manager for our specific security level (none) */
-    if (!BTM_SetSecurityLevel (FALSE, name, security_id, 0, psm, 0, 0)) {
+    if (!BTM_SetSecurityLevel (false, name, security_id, 0, psm, 0, 0)) {
         ESP_LOGE (PS3_TAG, "%s Registering security service %s failed", __func__, name);\
         return;
     }
@@ -298,4 +298,3 @@ static void ps3_l2cap_congest_cback (uint16_t l2cap_cid, bool congested)
 {
     ESP_LOGI(PS3_TAG, "[%s] l2cap_cid: 0x%02x\n  congested: %d", __func__, l2cap_cid, congested );
 }
-
