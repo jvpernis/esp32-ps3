@@ -81,7 +81,36 @@ bool Ps3Controller::isConnected()
 
 void Ps3Controller::setPlayer(int player)
 {
+    this->player = player;
     ps3SetLed(player);
+}
+
+
+void Ps3Controller::setRumble(float intensity, int duration) {
+
+    const float int_min = 0.0;
+    const float int_max = 100.0;
+
+    const int dur_min = 0;
+    const int dur_max = 5000;
+
+    uint8_t raw_intensity = map(constrain(intensity, int_min, int_max), int_min, int_max, 0, 255);
+    uint8_t raw_duration = map(constrain(duration, dur_min, dur_max), dur_min, dur_max, 0, 254);
+
+    if (duration == -1) {
+        raw_duration = 255;
+    }
+
+    ps3_cmd_t cmd = {};
+
+    cmd.rumble_right_intensity = raw_intensity;
+    cmd.rumble_left_intensity = raw_intensity;
+
+    cmd.rumble_right_duration = raw_duration;
+    cmd.rumble_left_duration = raw_duration;
+
+    ps3SetLedCmd(&cmd, this->player);
+    ps3Cmd(cmd);
 
 }
 
