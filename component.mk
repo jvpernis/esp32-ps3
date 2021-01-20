@@ -11,6 +11,7 @@ COMPONENT_EXTRA_INCLUDES +=     $(IDF_PATH)/components/bt/common/include/       
                                 $(IDF_PATH)/components/bt/host/bluedroid/common/include/      \
                                 $(IDF_PATH)/components/bt/host/bluedroid/stack/include        \
                                 $(IDF_PATH)/components/bt/host/bluedroid/stack/gap/include    \
+                                $(IDF_PATH)/components/bt/host/bluedroid/stack/l2cap/include  \
                                 $(IDF_PATH)/components/bt/host/bluedroid/osi/include
 
 # Legacy bluedroid location include paths
@@ -18,6 +19,7 @@ COMPONENT_EXTRA_INCLUDES +=     $(IDF_PATH)/components/bt/common/include/       
 COMPONENT_EXTRA_INCLUDES +=     $(IDF_PATH)/components/bt/bluedroid/common/include/           \
                                 $(IDF_PATH)/components/bt/bluedroid/stack/include             \
                                 $(IDF_PATH)/components/bt/bluedroid/stack/gap/include         \
+                                $(IDF_PATH)/components/bt/bluedroid/stack/l2cap/include       \
 								$(IDF_PATH)/components/bt/bluedroid/osi/include
 
 COMPONENT_DEPENDS := bt

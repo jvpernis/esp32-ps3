@@ -113,11 +113,10 @@ void ps3_spp_init();
 
 
 /********************************************************************************/
-/*                          G A P   F U N C T I O N S                           */
+/*                        L 2 C A P   F U N C T I O N S                         */
 /********************************************************************************/
 
-bool ps3_gap_is_connected();
-void ps3_gap_init_services();
-void ps3_gap_send_hid( hid_cmd_t *hid_cmd, uint8_t len );
+void ps3_l2cap_init_services();
+void ps3_l2cap_send_hid( hid_cmd_t *hid_cmd, uint8_t len );
 
 #endif
