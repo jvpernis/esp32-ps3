@@ -24,6 +24,8 @@ class Ps3Controller
         bool begin(const char *mac);
         bool end();
 
+        String getAddress();
+
         bool isConnected();
 
         void setPlayer(int player);

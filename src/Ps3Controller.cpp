@@ -4,11 +4,13 @@
 #include <esp_bt_defs.h>
 
 extern "C" {
+#include  "esp_bt_device.h"
 #include  "include/ps3.h"
 }
 
 
 #define ESP_BD_ADDR_HEX_STR        "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx"
+#define ESP_BD_ADDR_HEX_ARR(addr)   addr[0],  addr[1],  addr[2],  addr[3],  addr[4],  addr[5]
 #define ESP_BD_ADDR_HEX_PTR(addr)  &addr[0], &addr[1], &addr[2], &addr[3], &addr[4], &addr[5]
 
 
@@ -69,6 +71,22 @@ bool Ps3Controller::end()
 {
     // TODO
 
+}
+
+
+String Ps3Controller::getAddress() {
+    String address = "";
+
+    if (btStarted()) {
+        char mac[18];
+        const uint8_t* addr = esp_bt_dev_get_address();
+
+        sprintf(mac, ESP_BD_ADDR_STR, ESP_BD_ADDR_HEX_ARR(addr));
+
+        address = String(mac);
+    }
+
+    return address;
 }
 
 
