@@ -21,7 +21,7 @@ class Ps3Controller
         Ps3Controller();
 
         bool begin();
-        bool begin(char *mac);
+        bool begin(const char *mac);
         bool end();
 
         bool isConnected();

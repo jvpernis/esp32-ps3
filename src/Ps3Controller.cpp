@@ -49,7 +49,7 @@ bool Ps3Controller::begin()
 }
 
 
-bool Ps3Controller::begin(char *mac)
+bool Ps3Controller::begin(const char *mac)
 {
     esp_bd_addr_t addr;
 
