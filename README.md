@@ -55,6 +55,27 @@ void setup()
 }
 ```
 
+### Display Bluetooth address ###
+
+The example sketches in this libary all demonstrate initializing the libary using a custom Bluetooth MAC address. However, instead of hardcoding the MAC address like this in your sketch, you might want to simply read the ESP32's MAC address so that you can write it to the PS3 controller.
+
+Luckily, this can be accomplished by a simple sketch using `Ps3.getAddress()`:
+
+```c
+
+#include <Ps3Controller.h>
+
+void setup()
+{
+    Serial.begin(115200);
+    Ps3.begin();
+
+    String address = Ps3.getAddress();
+    Serial.println(address);
+}
+
+```
+
 ### Examples
 
 In order to learn more about how to use this library, please refer to the example sketches in the Arduino IDE with `File -> Examples -> PS3 Controller Host`:
