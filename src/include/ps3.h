@@ -165,6 +165,7 @@ typedef void(*ps3_event_object_callback_t)( void *object, ps3_t ps3, ps3_event_t
 
 bool ps3IsConnected();
 void ps3Init();
+void ps3Deinit();
 void ps3Enable();
 void ps3Cmd( ps3_cmd_t ps3_cmd );
 void ps3SetConnectionCallback( ps3_connection_callback_t cb );
@@ -172,6 +173,7 @@ void ps3SetConnectionObjectCallback( void *object, ps3_connection_object_callbac
 void ps3SetEventCallback( ps3_event_callback_t cb );
 void ps3SetEventObjectCallback( void *object, ps3_event_object_callback_t cb );
 void ps3SetLed( uint8_t player );
+void ps3SetLedCmd( ps3_cmd_t *cmd, uint8_t player );
 void ps3SetBluetoothMacAddress( const uint8_t *mac );
 
 

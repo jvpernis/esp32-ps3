@@ -25,6 +25,8 @@
 #ifndef BTM_API_H
 #define BTM_API_H
 
+
+#include "stack/bt_types.h"
 #include "common/bt_target.h"
 
 /* Security service definitions (BTM_SetSecurityLevel)
@@ -37,5 +39,24 @@
 #ifndef BTM_SEC_MAX_SERVICES
 #define BTM_SEC_MAX_SERVICES            65
 #endif
+
+
+/*******************************************************************************
+**
+** Function         BTM_SetSecurityLevel
+**
+** Description      Register service security level with Security Manager.  Each
+**                  service must register its requirements regardless of the
+**                  security level that is used.  This API is called once for originators
+**                  nad again for acceptors of connections.
+**
+** Returns          TRUE if registered OK, else FALSE
+**
+*******************************************************************************/
+//extern
+BOOLEAN BTM_SetSecurityLevel (BOOLEAN is_originator, const char *p_name,
+                              UINT8 service_id, UINT16 sec_level,
+                              UINT16 psm, UINT32 mx_proto_id,
+                              UINT32 mx_chan_id);
 
 #endif /* BTM_API_H */

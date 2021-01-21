@@ -24,9 +24,12 @@ class Ps3Controller
         bool begin(const char *mac);
         bool end();
 
+        String getAddress();
+
         bool isConnected();
 
         void setPlayer(int player);
+        void setRumble(float intensity, int duration = -1);
 
         void attach(callback_t callback);
         void attachOnConnect(callback_t callback);
@@ -35,6 +38,8 @@ class Ps3Controller
     private:
         static void _event_callback(void *object, ps3_t data, ps3_event_t event);
         static void _connection_callback(void *object, uint8_t is_connected);
+
+        int player;
 
         callback_t _callback_event = nullptr;
         callback_t _callback_connect = nullptr;

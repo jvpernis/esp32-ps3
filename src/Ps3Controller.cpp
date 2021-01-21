@@ -4,11 +4,13 @@
 #include <esp_bt_defs.h>
 
 extern "C" {
+#include  "esp_bt_device.h"
 #include  "include/ps3.h"
 }
 
 
 #define ESP_BD_ADDR_HEX_STR        "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx"
+#define ESP_BD_ADDR_HEX_ARR(addr)   addr[0],  addr[1],  addr[2],  addr[3],  addr[4],  addr[5]
 #define ESP_BD_ADDR_HEX_PTR(addr)  &addr[0], &addr[1], &addr[2], &addr[3], &addr[4], &addr[5]
 
 
@@ -67,8 +69,24 @@ bool Ps3Controller::begin(const char *mac)
 
 bool Ps3Controller::end()
 {
-    // TODO
+    ps3Deinit();
+    return true;
+}
 
+
+String Ps3Controller::getAddress() {
+    String address = "";
+
+    if (btStarted()) {
+        char mac[18];
+        const uint8_t* addr = esp_bt_dev_get_address();
+
+        sprintf(mac, ESP_BD_ADDR_STR, ESP_BD_ADDR_HEX_ARR(addr));
+
+        address = String(mac);
+    }
+
+    return address;
 }
 
 
@@ -81,7 +99,36 @@ bool Ps3Controller::isConnected()
 
 void Ps3Controller::setPlayer(int player)
 {
+    this->player = player;
     ps3SetLed(player);
+}
+
+
+void Ps3Controller::setRumble(float intensity, int duration) {
+
+    const float int_min = 0.0;
+    const float int_max = 100.0;
+
+    const int dur_min = 0;
+    const int dur_max = 5000;
+
+    uint8_t raw_intensity = map(constrain(intensity, int_min, int_max), int_min, int_max, 0, 255);
+    uint8_t raw_duration = map(constrain(duration, dur_min, dur_max), dur_min, dur_max, 0, 254);
+
+    if (duration == -1) {
+        raw_duration = 255;
+    }
+
+    ps3_cmd_t cmd = {};
+
+    cmd.rumble_right_intensity = raw_intensity;
+    cmd.rumble_left_intensity = raw_intensity;
+
+    cmd.rumble_right_duration = raw_duration;
+    cmd.rumble_left_duration = raw_duration;
+
+    ps3SetLedCmd(&cmd, this->player);
+    ps3Cmd(cmd);
 
 }
 

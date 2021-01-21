@@ -77,6 +77,50 @@ void ps3_spp_init()
 }
 
 
+/*******************************************************************************
+**
+** Function         ps3_spp_deinit
+**
+** Description      Deinitialise the SPP server
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3_spp_deinit()
+{
+
+    esp_err_t ret;
+
+    if ((ret = esp_spp_deinit()) != ESP_OK) {
+        ESP_LOGE(PS3_TAG, "%s spp deinit failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+
+#ifndef ARDUINO_ARCH_ESP32
+    if ((ret = esp_bluedroid_disable()) != ESP_OK) {
+        ESP_LOGE(PS3_TAG, "%s disable bluedroid failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+
+    if ((ret = esp_bluedroid_deinit()) != ESP_OK) {
+        ESP_LOGE(PS3_TAG, "%s deinitialize bluedroid failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+
+    if ((ret = esp_bt_controller_disable()) != ESP_OK) {
+        ESP_LOGE(PS3_TAG, "%s disable controller failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+
+    if ((ret = esp_bt_controller_deinit()) != ESP_OK) {
+        ESP_LOGE(PS3_TAG, "%s deinitialize controller failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+#endif
+}
+
+
+
 /********************************************************************************/
 /*                      L O C A L    F U N C T I O N S                          */
 /********************************************************************************/
@@ -97,9 +141,9 @@ static void ps3_spp_callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param
         ESP_LOGI(PS3_TAG, "ESP_SPP_INIT_EVT");
         esp_bt_dev_set_device_name(PS3_DEVICE_NAME);
 
-#if CONFIG_IDF_COMPATIBILITY >= IDF_COMPATIBILITY_MASTER_D9CE0BB
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(4, 0, 0)
         esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_NON_DISCOVERABLE);
-#elif CONFIG_IDF_COMPATIBILITY >= IDF_COMPATIBILITY_MASTER_21AF1D7
+#else
         esp_bt_gap_set_scan_mode(ESP_BT_SCAN_MODE_CONNECTABLE);
 #endif
 

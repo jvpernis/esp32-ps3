@@ -4,8 +4,10 @@ Ps3	KEYWORD1
 
 begin	KEYWORD2
 end	KEYWORD2
+getAddress	KEYWORD2
 isConnected	KEYWORD2
 setPlayer	KEYWORD2
+setRumble	KEYWORD2
 attach	KEYWORD2
 attachOnConnect	KEYWORD2
 attachOnDisconnect	KEYWORD2

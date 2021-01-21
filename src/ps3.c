@@ -47,7 +47,24 @@ static bool is_active = false;
 void ps3Init()
 {
     ps3_spp_init();
-    ps3_gap_init_services();
+    ps3_l2cap_init_services();
+}
+
+/*******************************************************************************
+**
+** Function         ps3Deinit
+**
+** Description      This deinitializes the bluetooth services to stop
+**                  listening for incoming connections.
+**
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3Deinit()
+{
+    ps3_l2cap_deinit_services();
+    ps3_spp_deinit();
 }
 
 
@@ -89,7 +106,7 @@ void ps3Enable()
 
     memcpy( hid_cmd.data, hid_cmd_payload_ps3_enable, len);
 
-    ps3_gap_send_hid( &hid_cmd, len );
+    ps3_l2cap_send_hid( &hid_cmd, len );
 }
 
 /*******************************************************************************
@@ -126,7 +143,7 @@ void ps3Cmd( ps3_cmd_t cmd )
     if (cmd.led3) memcpy( hid_cmd.data + ps3_control_packet_index_led3_arguments, hid_cmd_payload_led_arguments, sizeof(hid_cmd_payload_led_arguments));
     if (cmd.led4) memcpy( hid_cmd.data + ps3_control_packet_index_led4_arguments, hid_cmd_payload_led_arguments, sizeof(hid_cmd_payload_led_arguments));
 
-    ps3_gap_send_hid( &hid_cmd, len );
+    ps3_l2cap_send_hid( &hid_cmd, len );
 }
 
 
@@ -144,6 +161,24 @@ void ps3Cmd( ps3_cmd_t cmd )
 void ps3SetLed( uint8_t player )
 {
     ps3_cmd_t cmd = {0};
+    ps3SetLedCmd(&cmd, player);
+    ps3Cmd(cmd);
+}
+
+
+/*******************************************************************************
+**
+** Function         ps3SetLed
+**
+** Description      Sets the LED bits on the PS3 controller command to the
+**                  player number. Up to 10 players are supported.
+**
+**
+** Returns          void
+**
+*******************************************************************************/
+void ps3SetLedCmd( ps3_cmd_t *cmd, uint8_t player )
+{
 
     //           led4  led3  led2  led1
     // player 1                    1
@@ -157,12 +192,11 @@ void ps3SetLed( uint8_t player )
     // player 9  1     1     1
     // player 10 1     1     1     1
 
-    if( (cmd.led4 = player >= 4) != 0 ) player -= 4;
-    if( (cmd.led3 = player >= 3) != 0 ) player -= 3;
-    if( (cmd.led2 = player >= 2) != 0 ) player -= 2;
-    if( (cmd.led1 = player >= 1) != 0 ) player -= 1;
+    if( (cmd->led4 = player >= 4) != 0 ) player -= 4;
+    if( (cmd->led3 = player >= 3) != 0 ) player -= 3;
+    if( (cmd->led2 = player >= 2) != 0 ) player -= 2;
+    if( (cmd->led1 = player >= 1) != 0 ) player -= 1;
 
-    ps3Cmd(cmd);
 }
 
 

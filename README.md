@@ -55,6 +55,27 @@ void setup()
 }
 ```
 
+### Display Bluetooth address ###
+
+The example sketches in this libary all demonstrate initializing the libary using a custom Bluetooth MAC address. However, instead of hardcoding the MAC address like this in your sketch, you might want to simply read the ESP32's MAC address so that you can write it to the PS3 controller.
+
+Luckily, this can be accomplished by a simple sketch using `Ps3.getAddress()`:
+
+```c
+
+#include <Ps3Controller.h>
+
+void setup()
+{
+    Serial.begin(115200);
+    Ps3.begin();
+
+    String address = Ps3.getAddress();
+    Serial.println(address);
+}
+
+```
+
 ### Examples
 
 In order to learn more about how to use this library, please refer to the example sketches in the Arduino IDE with `File -> Examples -> PS3 Controller Host`:
@@ -156,18 +177,8 @@ Troubleshooting
 ==============
 
 ### The component gives compilation errors ###
-This project uses ESP-IDF internal API's in order to implement the PS3 controller functionality. This has a drawback of being susceptible to being suddenly broken. To remedy this, a compatibility config menu has been added so you can select older ESP-IDF versions to work with.
-
-In your project folder, run `make menuconfig` and configure your project with the following steps:
-- Navigate to `Component config  --->` and press <kbd>Enter</kbd> to open the component config menu.
-- Navigate to `PS3  --->` and press <kbd>Enter</kbd> to open the Bluetooth config menu.
-- Navigate to `Framework compatibility` and press <kbd>Enter</kbd> to show the compatibility options.
-- Select the compatibility suitable to your ESP-IDF version
-
-If you selected the `Latest stable release` or `Latest master revision` option and you are still getting compiler errors, please [create an issue](https://github.com/jvpernis/esp32-ps3/issues/new).
-
-If you are unsure which master branch revision you should take, figure out what the commit date is of your ESP-IDF version (by running `git show`), and look at the help text of each revision listed in the `Framework compatibility` configuration option to know their revision date.
-
+This project uses ESP-IDF internal API's in order to implement the PS3 controller functionality. This has a drawback of being susceptible to being suddenly broken.
+In case this happens and you're getting compiler errors, please [create an issue](https://github.com/jvpernis/esp32-ps3/issues/new).
 
 Sources
 ==============
